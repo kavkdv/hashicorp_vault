@@ -86,11 +86,11 @@ More details on how to install vault in different configurations could be found 
    `helm repo add hashicorp https://helm.releases.hashicorp.com`
 
    `helm install vault hashicorp/vault --set "server.dev.enabled=true" --namespace vault --version 0.19.0`
-   ![Result of vault installation!](Images\result-of-vault-installation.PNG)
+   ![Result of vault installation!](Images/result-of-vault-installation.PNG)
 
    `kubectl exec -ti vault-0 -n vault -- vault status`
    
-   ![Vault status!](Images\vault-status.PNG)
+   ![Vault status!](Images/vault-status.PNG)
 
    1. In order to make unseal run next commands:
    
@@ -111,7 +111,7 @@ More details on how to install vault in different configurations could be found 
    `path "secret/data/test2/*" { capabilities = ["list"] }`
    `EOF`
 
-   ![Vault policy!](Images\vault-policy.PNG)
+   ![Vault policy!](Images/vault-policy.PNG)
 
 1. Create service account (see ClusterRoleBinding.yml). Service account provides an identity for processes that run in a Pod so that the processes can contact the API server.
    
@@ -133,7 +133,7 @@ More details on how to install vault in different configurations could be found 
 
       The token_reviewer_jwt and kubernetes_ca_cert are mounted to the container by Kubernetes when it is created. The environment variable KUBERNETES_PORT_443_TCP_ADDR is defined and references the internal network address of the Kubernetes host.
 
-   ![Kubernetes auth method!](Images\kubernetes-auth-method.PNG)
+   ![Kubernetes auth method!](Images/kubernetes-auth-method.PNG)
 
 1. Create a role that maps the Kubernetes Service Account to Vault policy
 
@@ -145,7 +145,7 @@ More details on how to install vault in different configurations could be found 
       `policies=vault-policy \`
       `ttl=24h`
    
-   ![Vault role!](Images\vault-role.PNG)
+   ![Vault role!](Images/vault-role.PNG)
 
 1. Deploy a test app (see DemoApp.yml)
    
@@ -153,7 +153,7 @@ More details on how to install vault in different configurations could be found 
 
    DemoApp.yml contains the necessary anotations to read the corresponding secret and store it in the appsettings.secrets.json file. appsettings.secrets.json could be merged afterwards with other appsettings. 
 
-   ![Demo app!](Images\demo-app.PNG)
+   ![Demo app!](Images/demo-app.PNG)
 
 # Summary
 
