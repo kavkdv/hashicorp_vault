@@ -9,6 +9,9 @@
   - [Demo](#demo)
     - [Prerequisite](#prerequisite)
     - [Installation](#installation)
+- [Summary](#summary)
+  - [Pros](#pros)
+  - [Cons](#cons)
 - [Useful links](#useful-links)
 
 # About Vault
@@ -144,10 +147,32 @@ More details on how to install vault in different configurations could be found 
    
    ![Vault role!](Images\vault-role.PNG)
 
+1. Deploy a test app (see DemoApp.yml)
+   
+   `kubectl apply --filename DemoApp.yml`
+
+   DemoApp.yml contains the necessary anotations to read the corresponding secret and store it in the appsettings.secrets.json file. appsettings.secrets.json could be merged afterwards with other appsettings. 
+
+   ![Demo app!](Images\demo-app.PNG)
+
+# Summary
+
+## Pros
+
+1. The Vault is a centralized place to store secrets, as a result it is easy to update/add/delete secrets.
+1. The Vault has a good support from a lot of Secret Engines, for instance AWS, Azure.
+1. It's easy to stick a less privileged approach by restricting access with vault policies.
+
+## Cons
+
+1. It is obvious, that additional configuration in Kubernetes is needed to support the extraction of secrets from the Vault.
+
 # Useful links
 
-1. https://mermaid-js.github.io/mermaid-live-editor
 1. https://www.vaultproject.io/docs/what-is-vault
+1. https://www.vaultproject.io/docs
+1. https://learn.hashicorp.com/tutorials/vault/kubernetes-sidecar 
+
 1. https://mermaid-js.github.io/mermaid/#/./n00b-syntaxReference
 1. https://www.markdownguide.org/basic-syntax/
-1. https://www.vaultproject.io/docs
+1. https://mermaid-js.github.io/mermaid-live-editor
