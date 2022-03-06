@@ -104,8 +104,8 @@ More details on how to install vault in different configurations could be found 
    `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
    
    `cat <<EOF | vault policy write vault-policy -`
-   `path "secret/test1/*" { capabilities = ["read"] }`
-   `path "secret/test2/*" { capabilities = ["list"] }`
+   `path "secret/data/test1/*" { capabilities = ["read"] }`
+   `path "secret/data/test2/*" { capabilities = ["list"] }`
    `EOF`
 
    ![Vault policy!](Images\vault-policy.PNG)

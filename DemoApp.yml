@@ -14,8 +14,13 @@ spec:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/agent-inject-secret-appsettings.secrets.json: "secret/test1/config"
+        vault.hashicorp.com/agent-inject-status: 'update'
+        vault.hashicorp.com/agent-inject-secret-appsettings-secrets.json: "secret/test1/config"
         vault.hashicorp.com/role: "vault-role"
+        vault.hashicorp.com/agent-inject-template-appsettings-secrets.json: |
+          {{- with secret "secret/test1/config" -}}
+          {{ .Data.data.config }}
+          {{- end -}}
       labels:
         app: vault-app
     spec:
