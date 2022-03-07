@@ -117,7 +117,7 @@ More details on how to install vault in different configurations could be found 
    
    `kubectl create serviceaccount vault-sa -n vault`
 
-2. Configure Kubernetes auth method
+1. Configure Kubernetes auth method
    
    `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
 
@@ -133,7 +133,7 @@ More details on how to install vault in different configurations could be found 
 
    ![Kubernetes auth method!](Images/kubernetes-auth-method.PNG)
 
-3. Create a role that maps the Kubernetes Service Account to Vault policy
+1. Create a role that maps the Kubernetes Service Account to Vault policy
 
    `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
    
@@ -145,13 +145,13 @@ More details on how to install vault in different configurations could be found 
    
    ![Vault role!](Images/vault-role.PNG)
 
-4. Add secret (more details could be found here https://learn.hashicorp.com/collections/vault/secrets-management)
-   
-   `vault secrets enable -path=secret kv-v2`
+1. Add secret (more details could be found here https://learn.hashicorp.com/collections/vault/secrets-management)
+
+   `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
 
    `vault kv put secret/test1/config config="{Database: {ConnectionString: test1}}" ttl=1m`
 
-5. Deploy a test app (see DemoApp.yml)
+1. Deploy a test app (see DemoApp.yml)
    
    `kubectl apply --filename DemoApp.yml`
 
