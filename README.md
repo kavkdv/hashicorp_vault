@@ -170,7 +170,7 @@ More details on how to install vault in different configurations could be found 
    
    `kubectl apply --filename DemoApp.yml`
 
-   DemoApp.yml contains the necessary anotations to read the corresponding secret and store it in the appsettings.secrets.json file. appsettings.secrets.json could be merged afterwards with other appsettings. 
+   DemoApp.yml contains the necessary anotations to read the corresponding secret and store it in the appsettings.secrets.json file. appsettings.secrets.json could be merged afterwards with other appsettings. More details about annotations https://www.vaultproject.io/docs/platform/k8s/injector/annotations 
 
    ![Demo app!](Images/demo-app.PNG)
 
