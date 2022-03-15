@@ -78,17 +78,20 @@ More details on how to install vault in different configurations could be found 
 ### Installation
 
 1. Create Kubernetes namespace **vault**:
-   
-   `kubectl create namespace vault`
+   ```
+   kubectl create namespace vault
+   ```
 
 1. Install Helm chart hashicorp/vault v0.19.0 with DEV configuration, unseal for DEV configuration is not needed:
    
-   `helm repo add hashicorp https://helm.releases.hashicorp.com`
+   ```
+   helm repo add hashicorp https://helm.releases.hashicorp.com   
 
-   `helm install vault hashicorp/vault --set "server.dev.enabled=true" --namespace vault --version 0.19.0`
+   helm install vault hashicorp/vault --set "server.dev.enabled=true" --namespace vault --version 0.19.0
    ![Result of vault installation!](Images/result-of-vault-installation.PNG)
 
-   `kubectl exec -ti vault-0 -n vault -- vault status`
+   kubectl exec -ti vault-0 -n vault -- vault status
+   ```
    
    ![Vault status!](Images/vault-status.PNG)
 
