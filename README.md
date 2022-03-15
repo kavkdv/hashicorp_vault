@@ -88,91 +88,86 @@ More details on how to install vault in different configurations could be found 
    helm repo add hashicorp https://helm.releases.hashicorp.com   
 
    helm install vault hashicorp/vault --set "server.dev.enabled=true" --namespace vault --version 0.19.0
+   ```
    ![Result of vault installation!](Images/result-of-vault-installation.PNG)
-
+   ```
    kubectl exec -ti vault-0 -n vault -- vault status
    ```
    
    ![Vault status!](Images/vault-status.PNG)
 
    1. In order to make unseal run next commands:
-   
-      `kubectl exec -ti vault-0 -- vault operator init` - returns all unseal keys
+      ```
+      kubectl exec -ti vault-0 -- vault operator init - returns all unseal keys
 
-      `kubectl exec -ti vault-0 -- vault operator unseal` - must be run for each unseal key
+      kubectl exec -ti vault-0 -- vault operator unseal - must be run for each unseal key
 
       Another way to unseal is via UI (https://learn.hashicorp.com/tutorials/vault/getting-started-ui?in=vault/getting-started):
 
-      `kubectl port-forward vault-0 -n vault 8200:8200`
+      kubectl port-forward vault-0 -n vault 8200:8200
+      ```
 
 1. Configure Read-Only policy
-
-   `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
+   ```
+   kubectl exec -it vault-0 -n vault -- /bin/sh - jump into pod   
    
-   `cat <<EOF | vault policy write vault-policy -`
-   
-   `path "secret/data/test1/*" { capabilities = ["read"] }`
-   
-   `path "secret/data/test2/*" { capabilities = ["list"] }`
-   
-   `EOF`
+   cat <<EOF | vault policy write vault-policy -   
+   path "secret/data/test1/*" { capabilities = ["read"] }
+   path "secret/data/test2/*" { capabilities = ["list"] }
+   EOF
+   ```
 
    ![Vault policy!](Images/vault-policy.PNG)
 
 1. Create service account (see ClusterRoleBinding.yml). Service account provides an identity for processes that run in a Pod so that the processes can contact the API server.
-   
-   `kubectl create serviceaccount vault-sa -n vault`
+   ```
+   kubectl create serviceaccount vault-sa -n vault
+   ```
 
 1. Configure Kubernetes auth method
-
-   `vault token create` - create root token
+   ```
+   vault token create - create root token
    
-   `vault login` - login using created root token
+   vault login - login using created root token
    
-   `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
+   kubectl exec -it vault-0 -n vault -- /bin/sh - jump into pod
 
-   `vault auth enable kubernetes` - run the command inside pod
+   vault auth enable kubernetes - run the command inside pod
 
-   `vault write auth/kubernetes/config \`
-   
-      `kubernetes_host="https://$KUBERNETES_PORT_443_TCP_ADDR:443" \`
-      
-      `token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \`
-      
-      `kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt \`
-      
-      `issuer="https://kubernetes.default.svc.cluster.local"` - configure the Kubernetes authentication method
-
+   vault write auth/kubernetes/config \
+      kubernetes_host="https://$KUBERNETES_PORT_443_TCP_ADDR:443" \
+      token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+      kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+      issuer="https://kubernetes.default.svc.cluster.local"` - configure the Kubernetes authentication method
+   ```
       The token_reviewer_jwt and kubernetes_ca_cert are mounted to the container by Kubernetes when it is created. The environment variable KUBERNETES_PORT_443_TCP_ADDR is defined and references the internal network address of the Kubernetes host.
 
    ![Kubernetes auth method!](Images/kubernetes-auth-method.PNG)
 
 1. Create a role that maps the Kubernetes Service Account to Vault policy
-
-   `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
+   ```
+   kubectl exec -it vault-0 -n vault -- /bin/sh - jump into pod
    
-   `vault write auth/kubernetes/role/vault-role \`
-   
-      `bound_service_account_names=vault-sa \`
-      
-      `bound_service_account_namespaces=vault \`
-      
-      `policies=vault-policy \`
-      
-      `ttl=24h`
+   vault write auth/kubernetes/role/vault-role \
+      bound_service_account_names=vault-sa \
+      bound_service_account_namespaces=vault \
+      policies=vault-policy \
+      ttl=24h
+   ```
    
    ![Vault role!](Images/vault-role.PNG)
 
 1. Add secret (more details could be found here https://learn.hashicorp.com/collections/vault/secrets-management)
+   ```
+   kubectl exec -it vault-0 -n vault -- /bin/sh - jump into pod
 
-   `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
-
-   `vault kv put secret/test1/config config="{Database: {ConnectionString: test1}}" ttl=1m`
+   vault kv put secret/test1/config config="{Database: {ConnectionString: test1}}" ttl=1m
+   ```
 
 1. Deploy a test app (see DemoApp.yml)
-   
-   `kubectl apply --filename DemoApp.yml`
-
+   ```
+   kubectl apply --filename DemoApp.yml
+   ```
    DemoApp.yml contains the necessary anotations to read the corresponding secret and store it in the appsettings.secrets.json file. appsettings.secrets.json could be merged afterwards with other appsettings. More details about annotations https://www.vaultproject.io/docs/platform/k8s/injector/annotations 
 
    ![Demo app!](Images/demo-app.PNG)
