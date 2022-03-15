@@ -27,4 +27,4 @@ spec:
       serviceAccountName: vault-sa
       containers:
       - name: vault-app
-        image: mcr.microsoft.com/dotnet/samples:aspnetapp
+        image: jweissig/app:0.0.1
