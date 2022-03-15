@@ -107,8 +107,11 @@ More details on how to install vault in different configurations could be found 
    `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
    
    `cat <<EOF | vault policy write vault-policy -`
+   
    `path "secret/data/test1/*" { capabilities = ["read"] }`
+   
    `path "secret/data/test2/*" { capabilities = ["list"] }`
+   
    `EOF`
 
    ![Vault policy!](Images/vault-policy.PNG)
@@ -124,9 +127,13 @@ More details on how to install vault in different configurations could be found 
    `vault auth enable kubernetes` - run the command inside pod
 
    `vault write auth/kubernetes/config \`
+   
       `kubernetes_host="https://$KUBERNETES_PORT_443_TCP_ADDR:443" \`
+      
       `token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \`
+      
       `kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt \`
+      
       `issuer="https://kubernetes.default.svc.cluster.local"` - configure the Kubernetes authentication method
 
       The token_reviewer_jwt and kubernetes_ca_cert are mounted to the container by Kubernetes when it is created. The environment variable KUBERNETES_PORT_443_TCP_ADDR is defined and references the internal network address of the Kubernetes host.
@@ -138,9 +145,13 @@ More details on how to install vault in different configurations could be found 
    `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
    
    `vault write auth/kubernetes/role/vault-role \`
+   
       `bound_service_account_names=vault-sa \`
+      
       `bound_service_account_namespaces=vault \`
+      
       `policies=vault-policy \`
+      
       `ttl=24h`
    
    ![Vault role!](Images/vault-role.PNG)
