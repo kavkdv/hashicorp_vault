@@ -100,7 +100,7 @@ More details on how to install vault in different configurations could be found 
 
       Another way to unseal is via UI (https://learn.hashicorp.com/tutorials/vault/getting-started-ui?in=vault/getting-started):
 
-      `kubectl port-forward vault-0 8200:8200`
+      `kubectl port-forward vault-0 -n vault 8200:8200`
 
 1. Configure Read-Only policy
 
@@ -121,6 +121,10 @@ More details on how to install vault in different configurations could be found 
    `kubectl create serviceaccount vault-sa -n vault`
 
 1. Configure Kubernetes auth method
+
+   `vault token create` - create root token
+   
+   `vault login` - login using created root token
    
    `kubectl exec -it vault-0 -n vault -- /bin/sh` - jump into pod
 
